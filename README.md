@@ -2,20 +2,62 @@
 
 A Java service for handling cinema ticket purchases with various validation rules and business logic.
 
-## Ticket Prices
+## Project Instructions
 
-- Adult tickets: £25
-- Child tickets: £15
-- Infant tickets: £0 (free)
+### Overview
 
-## Business Rules
+There are 3 types of tickets:
+- Infant
+- Child
+- Adult
 
-1. Maximum 25 tickets can be purchased at a time
-2. At least one adult ticket must be purchased
-3. Cannot have more infants than adults
-4. Infant tickets are free and do not require a seat
-5. Child tickets require a seat
-6. Adult tickets require a seat
+The ticket prices are based on the type of ticket (see table below).
+
+| Ticket Type | Price |
+|-------------|-------|
+| INFANT      | £0    |
+| CHILD       | £15   |
+| ADULT       | £25   |
+
+The ticket purchaser declares how many and what type of tickets they want to buy.
+
+Multiple tickets can be purchased at any given time.
+
+### Rules
+
+- Only a maximum of 25 tickets can be purchased at a time.
+- Infants do not pay for a ticket and are not allocated a seat. They will be sitting on an Adult's lap.
+- Child and Infant tickets cannot be purchased without purchasing an Adult ticket.
+
+### Services
+
+- There is an existing `TicketPaymentService` responsible for taking payments.
+- There is an existing `SeatReservationService` responsible for reserving seats.
+
+### Constraints
+
+- The TicketService interface CANNOT be modified.
+- The code in the thirdparty.* packages CANNOT be modified.
+- The `TicketTypeRequest` SHOULD be an immutable object.
+
+### Assumptions
+
+You can assume:
+
+- All accounts with an id greater than zero are valid. They also have sufficient funds to pay for any number of tickets.
+- The `TicketPaymentService` implementation is an external provider with no defects. You do not need to worry about how the actual payment happens.
+- The payment will always go through once a payment request has been made to the `TicketPaymentService`.
+- The `SeatReservationService` implementation is an external provider with no defects. You do not need to worry about how the seat reservation algorithm works.
+- The seat will always be reserved once a reservation request has been made to the `SeatReservationService`.
+
+### Task
+
+Provide a working implementation of a `TicketService` that:
+
+1. Considers the above objective, business rules, constraints & assumptions.
+2. Calculates the correct amount for the requested tickets and makes a payment request to the `TicketPaymentService`.
+3. Calculates the correct number of seats to reserve and makes a seat reservation request to the `SeatReservationService`.
+4. Rejects any invalid ticket purchase requests. It is up to you to identify what should be deemed as an invalid purchase request.
 
 ## Technical Details
 
@@ -34,11 +76,4 @@ mvn test
 ## Dependencies
 
 - JUnit 4.11
-- Mockito 4.0.0
-
-## Assumptions
-
-1. `TicketPaymentService` is an external provider with no defects
-2. `SeatReservationService` is an external provider with no defects
-3. Account IDs must be greater than 0
-4. All ticket requests must be valid (non-null and positive quantity) 
+- Mockito 4.0.0 
